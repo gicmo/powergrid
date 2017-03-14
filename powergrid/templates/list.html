@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<table class="table table-sm table-hover">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Model</th>
+      <th>GNOME</th>
+      <th>Test</th>
+      <th>Power</th>
+      <th>Est. Life</th>
+    </tr>
+    <tbody>
+    {% for entry in entries %}
+    <tr>
+      <th scope="row">x</th>
+      <td>{{ entry.model }}</td>
+      <td>{{ entry.gnome}} </td>
+      <td>{{ entry.test_name }}</td>
+      <td>{{ entry.est_power }}</td>
+      <td>{{ entry.est_life }}</td>
+    </tr>
+  {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

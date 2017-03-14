@@ -1,0 +1,11 @@
+
+** Local development
+#+BEGIN_SRC sh
+pip install --editable .
+#+END_SRC
+
+#+BEGIN_SRC sh
+export FLASK_APP=powergrid
+export FLASK_DEBUG=true
+flask run
+#+END_SRC
