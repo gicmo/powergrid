@@ -57,7 +57,10 @@
     </div>
     <div class="col col-md-8">
       OS: {{ data["system-info"]["software"]["os"]["type"] }} <br>
-      Kernel: {{ data["system-info"]["software"]["os"]["kernel"] }}
+      Kernel: {{ data["system-info"]["software"]["os"]["kernel"] }} <br>
+      GNOME:  {{ data["system-info"]["software"]["gnome"]["version"] }}
+      ({{ data["system-info"]["software"]["gnome"]["date"] }})
+      from  {{ data["system-info"]["software"]["gnome"]["distributor"] }}
     </div>
   </div>
 
