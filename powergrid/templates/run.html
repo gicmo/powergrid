@@ -1,0 +1,124 @@
+<!-- -*- engine:django -*- -->
+{% extends "layout.html" %}
+{% block body %}
+
+  <div id="graph-current" class="graph"></div>
+
+  <script src="https://d3js.org/d3.v3.min.js"></script>
+  <script>
+
+    var run = {{ dumps(data) | safe }};
+    var log = run.log;
+    var energy_full = log[0]["energy-full"] / (1000*1000); // We want Watt
+
+    var data = log.map(function(l) {
+      return {
+        timestamp: new Date(l["time-ms"]),
+        energy: l.energy / (1000*1000)
+      };
+    });
+
+    var margin = {top: 20, right: 30, bottom: 30, left: 50};
+    var width  = 640;
+    var height = 150;
+
+    var x = d3.time.scale()
+              .range([0, width]);
+
+    var y = d3.scale.linear()
+              .range([height, 0])
+              .domain([0, energy_full]);
+
+    var y1 = d3.scale.linear()
+		           .range([height, 0])
+		           .domain([0, 20]);
+
+    var ax = d3.svg.axis()
+		           .scale(x)
+		           .orient("bottom")
+               .tickFormat(d3.time.format("%H:%M"));
+
+    var ay = d3.svg.axis()
+		           .scale(y)
+		           .orient("left").ticks(4);
+
+    var ay1 = d3.svg.axis()
+		            .scale(y1)
+		            .orient("right").ticks(5);
+
+    var svg = d3.select("#graph-current").append("svg")
+		            .attr("width", width + margin.left + margin.right)
+		            .attr("height", height + margin.top + margin.bottom)
+		            .append("g")
+		            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    svg.append("g")
+       .attr("class", "x axis")
+       .attr("id", "x")
+       .attr("transform", "translate(0," + height + ")")
+       .call(ax);
+
+    svg.append("g")
+       .attr("class", "y axis")
+       .attr("id", "y0")
+       .call(ay)
+       .append("text")
+       .attr("transform", "rotate(-90)")
+       .attr("y", 6)
+       .attr("dy", ".71em")
+       .style("text-anchor", "end")
+       .text("Energy");
+
+    svg.append("g")
+       .attr("class", "y axis")
+       .attr("id", "y1")
+       .attr("transform", "translate(" + (width - margin.right/2.0) + " ,0)")
+       .call(ay1)
+       .append("text")
+       .attr("transform", "rotate(-90)")
+       .attr("dy", "-.71em")
+       .style("text-anchor", "end")
+       .text("Power");
+
+    var line_energy = d3.svg.line()
+                        .x(function(d) { return x(d.timestamp); })
+                        .y(function(d) { return y(d.energy); });
+
+    x.domain(d3.extent(data, function(d) { return d.timestamp; }));
+    y.domain(d3.extent(data, function(d) { return d.energy; }));
+
+    svg.append("clipPath")
+       .attr("id", "clip")
+       .append("rect")
+       .attr("x", "0")
+       .attr("y", "0")
+       .attr("width", width - margin.right/2.0)
+       .attr("height", height);
+
+    svg.append("path")
+       .datum(data)
+       .attr("id", "line-energy")
+       .attr("class", "line data-energy")
+       .attr("d", line_energy)
+       .attr("clip-path", "url(#clip)");
+
+    //svg.append("path")
+    //   .datum(data)
+    //   .attr("id", "line-power")
+    //   .attr("class", "line data-power")
+    //   .attr("d", line_power)
+    //   .attr("clip-path", "url(#clip)");
+
+    svg.select("#x").call(ax);
+    svg.select("#y0").call(ay);
+    //svg.select("#y1").call(ay1);
+    //svg.select("#line-energy").attr("d", line_energy);
+    //svg.select("#line-power").attr("d", line_hudt);
+
+    //svg.selectAll("#line-energy")
+    //   .data([log]) // set the new data
+    //   .attr("d", line_energy);
+
+  </script>
+
+{% endblock %}

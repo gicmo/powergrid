@@ -71,6 +71,7 @@ def extract_info(e):
     hw = info['hardware']
     sw = info['software']
     return {
+        'id': d['id'],
         'model': hw['version'],
         'gnome': sw['gnome']['version'],
         'test_name': d['test-name'],
@@ -88,6 +89,19 @@ def list_runs():
     return render_template('list.html',
                            title="Overview",
                            entries=info)
+
+
+@app.route('/runs/<runid>', methods=['GET'])
+def show_single(runid):
+    print(runid)
+    db = db_get()
+    cur = db.execute('select id, data from runs where id = ?', [runid])
+    row = cur.fetchall()
+    data = json.loads(row[0]['data'])
+    return render_template('run.html',
+                           title='Run view',
+                           data=data,
+                           dumps=json.dumps)
 
 
 if __name__ == '__main__':

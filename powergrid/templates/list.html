@@ -5,7 +5,7 @@
 <table class="table table-sm table-hover">
   <thead>
     <tr>
-      <th>#</th>
+      <th>Action</th>
       <th>Model</th>
       <th>GNOME</th>
       <th>Test</th>
@@ -15,7 +15,9 @@
     <tbody>
     {% for entry in entries %}
     <tr>
-      <th scope="row">x</th>
+      <th scope="row"><a href="/runs/{{ entry.id | safe }}">
+        <i class="fa fa-area-chart" aria-hidden="true"></i>
+      </a></th>
       <td>{{ entry.model }}</td>
       <td>{{ entry.gnome}} </td>
       <td>{{ entry.test_name }}</td>
