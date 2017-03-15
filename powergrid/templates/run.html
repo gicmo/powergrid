@@ -2,7 +2,64 @@
 {% extends "layout.html" %}
 {% block body %}
 
-  <div id="graph-current" class="graph"></div>
+  <div class="row">
+    <div class="col">
+      <div id="graph-current" class="graph"></div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col offset-md-1 col-md-1" style="text-align: right">
+      <h3>
+        <i class="fa fa-book" aria-hidden="true"></i>
+      </h3>
+    </div>
+    <div class="col col-md-8">
+      {{ data["test-name"] }}
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col offset-md-1 col-md-1" style="text-align: right">
+      <h3>
+        <i class="fa fa-laptop fa-3" aria-hidden="true"></i>
+      </h3>
+    </div>
+    <div class="col col-md-8">
+      {{ data["system-info"]["hardware"]["vendor"] }}
+      {{ data["system-info"]["hardware"]["version"] }}
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col offset-md-1 col-md-1" style="text-align: right">
+        <i class="fa fa-cogs fa-2" aria-hidden="true"></i>
+    </div>
+    <div class="col col-md-8">
+      Bios Version: {{ data["system-info"]["hardware"]["bios"]["version"] }} <br>
+      Bios Date: {{ data["system-info"]["hardware"]["bios"]["date"] }}
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col offset-md-1 col-md-1" style="text-align: right">
+      <i class="fa fa-microchip fa-2" aria-hidden="true"></i>
+    </div>
+    <div class="col col-md-8">
+      CPU: {{ data["system-info"]["hardware"]["cpu"]["info"] }} <br>
+      RAM: {{ data["system-info"]["hardware"]["memory"]["total"] }}
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col offset-md-1 col-md-1" style="text-align: right">
+      <i class="fa fa-linux fa-2" aria-hidden="true"></i>
+    </div>
+    <div class="col col-md-8">
+      OS: {{ data["system-info"]["software"]["os"]["type"] }} <br>
+      Kernel: {{ data["system-info"]["software"]["os"]["kernel"] }}
+    </div>
+  </div>
 
   <script src="https://d3js.org/d3.v3.min.js"></script>
   <script>
