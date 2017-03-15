@@ -61,6 +61,10 @@ def upload_run():
     return "Created", 201
 
 
+def display_est_life(est):
+    return '%d:%d' % (est // 3600, est % 3600 // 60)
+
+
 def extract_info(e):
     d = json.loads(e['data'])
     info = d['system-info']
@@ -70,7 +74,7 @@ def extract_info(e):
         'model': hw['version'],
         'gnome': sw['gnome']['version'],
         'test_name': d['test-name'],
-        'est_life': "%5.2f" % (d['estimated-life'] / 3600.0),
+        'est_life': display_est_life(d['estimated-life']),
         'est_power': "%5.2f" % (d['power'])
     }
 
