@@ -81,7 +81,9 @@ def list_runs():
     cur = db.execute('select id, data from runs order by id desc')
     data = cur.fetchall()
     info = [extract_info(e) for e in data]
-    return render_template('list.html', entries=info)
+    return render_template('list.html',
+                           title="Overview",
+                           entries=info)
 
 
 if __name__ == '__main__':
