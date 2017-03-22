@@ -3,6 +3,7 @@
 import json
 import os
 import sqlite3
+import sys
 
 from flask import Flask, render_template, request
 
@@ -10,12 +11,15 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 
 app.config.update({
-    'DATABASE': os.path.join(app.root_path, 'powergrid.db'),
+    'DATABASE': os.environ.get("DATABASE", None) or
+    os.path.join(app.root_path, 'powergrid.db'),
 })
 
 
 def db_connect():
-    rv = sqlite3.connect(app.config['DATABASE'])
+    db_path = app.config['DATABASE']
+    print("DB: %s" % db_path, file=sys.stderr)
+    rv = sqlite3.connect(db_path)
     rv.row_factory = sqlite3.Row
     return rv
 
