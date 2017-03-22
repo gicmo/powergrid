@@ -8,11 +8,15 @@ ENV FLASK_APP powergrid
 ENV LC_ALL=C.UTF-8
 ENV LANG=C.UTF-8
 
-ADD . /srv
-WORKDIR /srv
+ENV DATABASE="/data/powergrid.db"
+RUN mkdir /data
+VOLUME ["/data"]
 
-RUN pip3 install --requirement /srv/requirements.txt
+WORKDIR /srv
+ADD requirements.txt /srv/
+RUN pip3 install --requirement requirements.txt
+
+ADD . /srv/
 RUN pip3 install .
 
-RUN flask setupdb
-CMD ["flask", "run", "--host=0.0.0.0"]
+CMD ["/srv/run.sh"]
