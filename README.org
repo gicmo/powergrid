@@ -9,3 +9,23 @@ export FLASK_APP=powergrid
 export FLASK_DEBUG=true
 flask run
 #+END_SRC
+
+** Docker
+#+BEGIN_SRC sh
+#First time only, create a volume to make data persistent
+sudo docker volume create --name powergrid-storage
+
+#Build and run
+sudo docker build -t powergrid .
+sudo docker run -p 5000:5000 -v powergrid-storage:/data --name powergrid -d powergrid
+
+#Stopping
+sudo docker stop powergrid && sudo docker rm powergrid
+#+END_SRC
+
+** Uploading data
+
+#+BEGIN_SRC sh
+curl -H "Content-Type: application/json" -X POST http://localhost:5000/upload -d @<FILE>
+#+END_SRC
+
