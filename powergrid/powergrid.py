@@ -105,7 +105,8 @@ def show_single(runid):
     return render_template('run.html',
                            title='Run view',
                            data=data,
-                           dumps=json.dumps)
+                           dumps=json.dumps,
+                           round=round)
 
 
 if __name__ == '__main__':

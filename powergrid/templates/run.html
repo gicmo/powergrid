@@ -15,7 +15,26 @@
       </h3>
     </div>
     <div class="col col-md-8">
-      {{ data["test-name"] }}
+      <span class="sysinfo">
+        {{ data["test-name"] }} <br>
+        {{ "Duration" if 'duration' in data else "Until" }}
+        {{ data['duration'] if 'duration' in data else data['until-percent'] }}
+        {{ "sec" if 'duration' in data else "%" }}
+      </span>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col offset-md-1 col-md-1" style="text-align: right">
+      <h3>
+        <i class="fa fa-battery-empty fa-3" aria-hidden="true"></i>
+      </h3>
+    </div>
+    <div class="col col-md-8">
+      <span class="sysinfo">
+        Life (est):
+        {{ round(data["estimated-life"] // 3600) }}:{{ round(data["estimated-life"] % 3600 / 60) }}h
+      </span>
     </div>
   </div>
 
