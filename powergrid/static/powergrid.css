@@ -64,6 +64,10 @@ i.color-gray {
     color: gray;
 }
 
+.sysinfo {
+    font-family: 'Share Tech Mono', monospace;
+}
+
 .graph {
     font: 10px sans-serif;
     padding-bottom: 10px;
