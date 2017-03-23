@@ -45,8 +45,10 @@
       </h3>
     </div>
     <div class="col col-md-8">
-      {{ data["system-info"]["hardware"]["vendor"] }}
-      {{ data["system-info"]["hardware"]["version"] }}
+      <span class="sysinfo">
+        {{ data["system-info"]["hardware"]["vendor"] }}
+        {{ data["system-info"]["hardware"]["version"] }}
+      </span>
     </div>
   </div>
 
@@ -55,8 +57,10 @@
         <i class="fa fa-cogs fa-2" aria-hidden="true"></i>
     </div>
     <div class="col col-md-8">
-      Bios Version: {{ data["system-info"]["hardware"]["bios"]["version"] }} <br>
-      Bios Date: {{ data["system-info"]["hardware"]["bios"]["date"] }}
+      <span class="sysinfo">
+        Bios Version: {{ data["system-info"]["hardware"]["bios"]["version"] }} <br>
+        Bios Date: {{ data["system-info"]["hardware"]["bios"]["date"] }}
+      </span>
     </div>
   </div>
 
@@ -65,8 +69,10 @@
       <i class="fa fa-microchip fa-2" aria-hidden="true"></i>
     </div>
     <div class="col col-md-8">
-      CPU: {{ data["system-info"]["hardware"]["cpu"]["info"] }} <br>
-      RAM: {{ data["system-info"]["hardware"]["memory"]["total"] }}
+      <span class="sysinfo">
+        CPU: {{ data["system-info"]["hardware"]["cpu"]["info"][0] }} <br>
+        RAM: {{ data["system-info"]["hardware"]["memory"]["total"] }}
+      </span>
     </div>
   </div>
 
@@ -75,11 +81,13 @@
       <i class="fa fa-linux fa-2" aria-hidden="true"></i>
     </div>
     <div class="col col-md-8">
-      OS: {{ data["system-info"]["software"]["os"]["type"] }} <br>
-      Kernel: {{ data["system-info"]["software"]["os"]["kernel"] }} <br>
-      GNOME:  {{ data["system-info"]["software"]["gnome"]["version"] }}
-      ({{ data["system-info"]["software"]["gnome"]["date"] }})
-      from  {{ data["system-info"]["software"]["gnome"]["distributor"] }}
+      <span class="sysinfo">
+        OS: {{ data["system-info"]["software"]["os"]["type"] }} <br>
+        Kernel: {{ data["system-info"]["software"]["os"]["kernel"] }} <br>
+        GNOME:  {{ data["system-info"]["software"]["gnome"]["version"] }}
+        ({{ data["system-info"]["software"]["gnome"]["date"] }})
+        from  {{ data["system-info"]["software"]["gnome"]["distributor"] }}
+      </span>
     </div>
   </div>
 
