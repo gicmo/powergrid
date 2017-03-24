@@ -7,5 +7,5 @@ if [ ! -f "$DATABASE" ]; then
   flask setupdb
 fi
 
-flask run --host 0.0.0.0
+exec flask run --host 0.0.0.0
 
