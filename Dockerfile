@@ -9,7 +9,7 @@ ENV LC_ALL=C.UTF-8
 ENV LANG=C.UTF-8
 
 ENV DATABASE="/data/powergrid.db"
-RUN mkdir /data
+RUN mkdir /data && chmod a+rwx /data
 VOLUME ["/data"]
 
 WORKDIR /srv
