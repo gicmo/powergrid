@@ -108,10 +108,12 @@
     var run = {{ dumps(data) | safe }};
     var log = run.log;
     var energy_full = log[0]["energy-full"] / (1000*1000); // We want Watt
+    var start_time = d3.time.format("%Y-%m-%d %H:%M:%S").parse(run["start-time"]);
 
     var data = log.map(function(l) {
+      var ts = new Date(l["time-ms"]);
       return {
-        timestamp: new Date(l["time-ms"]),
+        timestamp: d3.time.second.offset(start_time, l["time-ms"] / 1000),
         energy: l.energy / (1000*1000)
       };
     });
