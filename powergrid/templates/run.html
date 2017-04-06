@@ -54,6 +54,24 @@
 
   <div class="row">
     <div class="col offset-md-1 col-md-1" style="text-align: right">
+      <i class="fa fa-battery-three-quarters fa-2" aria-hidden="true"></i>
+    </div>
+    <div class="col col-md-8">
+      <span class="sysinfo">
+        {% if data["system-info"]["hardware"]["batteries"]|length > 0 %}
+          {% for bat in data["system-info"]["hardware"]["batteries"] %}
+            <small>{{bat['name']}}</small> {{bat['vendor']}}: {{bat['energy-full']}} Wh
+            <small> (design: {{bat['energy-full-design']}} Wh)</small> <br>
+          {% endfor %}
+        {% else %}
+          N/A
+        {% endif %}
+      </span>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col offset-md-1 col-md-1" style="text-align: right">
       <i class="fa fa-sun-o fa-2" aria-hidden="true"></i>
     </div>
     <div class="col col-md-8">
