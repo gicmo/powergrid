@@ -5,7 +5,7 @@ import os
 import sqlite3
 import sys
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -107,6 +107,15 @@ def show_single(runid):
                            data=data,
                            dumps=json.dumps,
                            round=round)
+
+
+@app.route('/api/runs/<runid>', methods=['GET'])
+def api_runs_single(runid):
+    db = db_get()
+    cur = db.execute('select id, data from runs where id = ?', [runid])
+    row = cur.fetchall()
+    data = json.loads(row[0]['data'])
+    return jsonify(data)
 
 
 if __name__ == '__main__':
