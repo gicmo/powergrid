@@ -108,6 +108,15 @@ def show_single(runid):
                            dumps=json.dumps,
                            round=round)
 
+@app.route('/api/runs')
+def api_list_runs():
+    db = db_get()
+    cur = db.execute('select id, data from runs order by id desc')
+    data = cur.fetchall()
+    info = [extract_info(e) for e in data]
+    return jsonify(info)
+
+
 
 @app.route('/api/runs/<runid>', methods=['GET'])
 def api_runs_single(runid):
