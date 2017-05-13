@@ -6,6 +6,7 @@ import Router from 'vue-router'
 
 import App from './App'
 import RunTable from '@/js/components/RunTable'
+import Run from '@/js/components/Run'
 
 Vue.use(Router)
 
@@ -18,6 +19,11 @@ const router = new Router({
       path: '/',
       name: 'Overview',
       component: RunTable
+    },
+    {
+      path: '/runs/:id',
+      name: 'Run',
+      component: Run
     }
   ]
 })
