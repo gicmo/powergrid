@@ -1,7 +1,17 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <router-view></router-view>
+    <div class="container">
+      <div class="header">
+        <h1>
+          <i class="fa fa-bolt" aria-hidden="true"></i>
+          Powergrid
+          <small></small>
+        </h1>
+      </div>
+
+      <router-view></router-view>
+
+    </div>
   </div>
 </template>
 
@@ -16,8 +26,5 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
