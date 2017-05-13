@@ -1,5 +1,8 @@
+* powergrid
+Power performance metrics for GNOME-Battery-Bench
 
 ** Local development
+*** Backend
 #+BEGIN_SRC sh
 pip install --editable .
 #+END_SRC
@@ -9,7 +12,25 @@ export FLASK_APP=powergrid
 export FLASK_DEBUG=true
 flask run
 #+END_SRC
+*** Frontend
+Running and building
+#+BEGIN_SRC sh
+# install dependencies
+npm install
 
+# serve with hot reload at localhost:8080
+npm run dev
+
+# build for production with minification [view the bundle analyzer report]
+npm run build [--report]
+#+END_SRC
+
+Testing
+#+BEGIN_SRC sh
+npm run unit # run unit tests
+npm run e2e  # run e2e tests
+npm test     # run all tests
+#+END_SRC
 ** Docker
 #+BEGIN_SRC sh
 #First time only, create a volume to make data persistent
@@ -28,4 +49,3 @@ sudo docker stop powergrid && sudo docker rm powergrid
 #+BEGIN_SRC sh
 curl -H "Content-Type: application/json" -X POST http://localhost:5000/upload -d @<FILE>
 #+END_SRC
-
