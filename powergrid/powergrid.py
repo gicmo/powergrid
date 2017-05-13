@@ -5,7 +5,7 @@ import os
 import sqlite3
 import sys
 
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_from_directory
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -117,6 +117,18 @@ def api_runs_single(runid):
     data = json.loads(row[0]['data'])
     return jsonify(data)
 
+@app.route('/static/js/<path:path>')
+def static_js(path):
+    return app.send_static_file('js/' + path)
+
+@app.route('/static/css/<path:path>')
+def send_css(path):
+    print(path)
+    return app.send_static_file('css/' + path)
+
+@app.route('/spa.html')
+def spa_index():
+    return app.send_static_file('index.html')
 
 if __name__ == '__main__':
     app.run()
