@@ -10,7 +10,7 @@
       <div class="col col-md-8">
         <span class="sysinfo">
           {{ info.hardware.vendor }}
-          {{ info.hardware.name }}
+          {{ info.hardware.vendor != "LENOVO" ? info.hardware.name : info.hardware.version }}
         </span>
       </div>
     </div>
