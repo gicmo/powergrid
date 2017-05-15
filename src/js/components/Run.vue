@@ -1,5 +1,6 @@
 <template>
   <div v-if="run" >
+    <power-graph :log="run['log']"></power-graph>
     <run-info :run="run"></run-info>
     <system-info :info="run['system-info']"></system-info>
   </div>
@@ -8,6 +9,7 @@
 <script>
   import RunInfo from './RunInfo'
   import SystemInfo from './SystemInfo'
+  import PowerGraph from './PowerGraph'
 
   export default {
     name: 'Run',
@@ -41,7 +43,7 @@
         )
       }
     },
-    components: { RunInfo, SystemInfo }
+    components: { RunInfo, SystemInfo, PowerGraph }
   }
 </script>
 
