@@ -74,9 +74,11 @@ def extract_info(e):
     info = d['system-info']
     hw = info['hardware']
     sw = info['software']
+    vendor = hw['vendor']
+    name = hw['name'] if vendor != "LENOVO" else hw['version']
     return {
         'id': d['id'],
-        'model': hw['version'],
+        'model': name,
         'gnome': sw['gnome']['version'],
         'test_name': d['test-name'],
         'est_life': display_est_life(d['estimated-life']),
