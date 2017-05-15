@@ -1,10 +1,12 @@
 <template>
   <div v-if="run" >
+    <run-info :run="run"></run-info>
     <system-info :info="run['system-info']"></system-info>
   </div>
 </template>
 
 <script>
+  import RunInfo from './RunInfo'
   import SystemInfo from './SystemInfo'
 
   export default {
@@ -39,7 +41,7 @@
         )
       }
     },
-    components: { SystemInfo }
+    components: { RunInfo, SystemInfo }
   }
 </script>
 
