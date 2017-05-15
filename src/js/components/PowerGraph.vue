@@ -25,7 +25,7 @@
 
       const data = log.map(l => {
         return {
-          timestamp: new Date(l['time-ms']),
+          timestamp: new Date(1988, 3, 15, 0, 0, 0, l['time-ms']),
           energy: l.energy / (1000 * 1000)
         }
       })
