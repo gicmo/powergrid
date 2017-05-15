@@ -94,7 +94,12 @@ def list_runs():
 @app.route('/api/runs')
 def api_list_runs():
     db = db_get()
-    cur = db.execute('select id, data from runs order by id desc')
+    sql = ('select id, data '
+           'from runs '
+           'order by json_extract(runs.data, "$.test-name"), '
+           '         json_extract(runs.data, "$.power") ASC')
+
+    cur = db.execute(sql)
     data = cur.fetchall()
     info = [extract_info(e) for e in data]
     return jsonify(info)
