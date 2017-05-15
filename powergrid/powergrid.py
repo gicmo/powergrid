@@ -86,27 +86,8 @@ def extract_info(e):
 
 @app.route('/')
 def list_runs():
-    db = db_get()
-    cur = db.execute('select id, data from runs order by id desc')
-    data = cur.fetchall()
-    info = [extract_info(e) for e in data]
-    return render_template('list.html',
-                           title="Overview",
-                           entries=info)
+    return app.send_static_file('index.html')
 
-
-@app.route('/runs/<runid>', methods=['GET'])
-def show_single(runid):
-    print(runid)
-    db = db_get()
-    cur = db.execute('select id, data from runs where id = ?', [runid])
-    row = cur.fetchall()
-    data = json.loads(row[0]['data'])
-    return render_template('run.html',
-                           title='Run view',
-                           data=data,
-                           dumps=json.dumps,
-                           round=round)
 
 @app.route('/api/runs')
 def api_list_runs():
@@ -117,7 +98,6 @@ def api_list_runs():
     return jsonify(info)
 
 
-
 @app.route('/api/runs/<runid>', methods=['GET'])
 def api_runs_single(runid):
     db = db_get()
@@ -126,18 +106,17 @@ def api_runs_single(runid):
     data = json.loads(row[0]['data'])
     return jsonify(data)
 
+
 @app.route('/static/js/<path:path>')
 def static_js(path):
     return app.send_static_file('js/' + path)
+
 
 @app.route('/static/css/<path:path>')
 def send_css(path):
     print(path)
     return app.send_static_file('css/' + path)
 
-@app.route('/spa.html')
-def spa_index():
-    return app.send_static_file('index.html')
 
 if __name__ == '__main__':
     app.run()
