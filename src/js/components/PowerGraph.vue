@@ -123,3 +123,41 @@
   }
 
 </script>
+
+<style>
+
+  .graph {
+    font: 10px sans-serif;
+    padding-bottom: 10px;
+    padding-top: 10px;
+  }
+
+  .axis path,
+  .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+  }
+
+  .x.axis path {
+    display: none;
+  }
+
+  .y.axis path {
+    stroke-width: 0.5px;
+  }
+
+  .line {
+    fill: none;
+    stroke-width: 1.5px;
+  }
+
+  .data-power {
+    stroke: steelblue;
+  }
+
+  .data-energy {
+    stroke: #ff4955;
+  }
+
+</style>
