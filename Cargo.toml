@@ -1,0 +1,8 @@
+[package]
+name = "powergrid"
+version = "1.0.0"
+authors = ["Christian Kellner <christian@kellner.me>"]
+
+[dependencies]
+rocket = "0.2.6"
+rocket_codegen = "0.2.6"
