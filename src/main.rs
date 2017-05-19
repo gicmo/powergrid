@@ -26,12 +26,14 @@ use rocket::response::{NamedFile, Responder, Response};
 use rocket::http;
 use rocket::State;
 use rusqlite::Connection;
+use rocket_contrib::{JSON, UUID, Value};
 
 type DB = Mutex<Connection>;
 
 #[derive(Debug)]
 enum Error {
     Internal(String),
+    NotFound(String),
 }
 
 impl From<rusqlite::Error> for Error {
@@ -65,11 +67,21 @@ impl<'r> Responder<'r> for Error {
                         })
                                                         .to_string()));
             }
+            Error::NotFound(val) => {
+                builder
+                    .status(http::Status::NotFound)
+                    .sized_body(io::Cursor::new(json!(
+                        {"title": "Entity not found",
+                         "detail": val
+                        })
+                                                        .to_string()));
+            }
         }
 
         builder.ok()
     }
 }
+
 
 #[get("/")]
 fn index() -> io::Result<NamedFile> {
@@ -133,6 +145,23 @@ fn api_runs(db: State<DB>) -> Result<String, Error> {
 
     rows.map_err(Error::from)
         .and_then(|ref r| serde_json::to_string(r).map_err(Error::from))
+}
+
+#[get("/runs/<id>")]
+fn api_run(id: UUID, db: State<DB>) -> Result<String, Error> {
+    let conn = db.lock().expect("DB Lock");
+    let mut stmt = conn.prepare("select data from runs where id = :id")?;
+
+    let id_str = format!("{}", id);
+    let rows: Result<Vec<String>, rusqlite::Error> = stmt.query_map_named(&[(":id", &id_str)],
+                                                                          |row| row.get(0))?
+        .collect();
+
+    match rows {
+        Err(e) => Err(Error::from(e)),
+        Ok(ref v) if v.capacity() == 0 => Err(Error::NotFound(format!("{} not found", id))),
+        Ok(ref v) => Ok(v[0].clone()),
+    }
 }
 
 fn setupdb(local: &ArgMatches) -> Result<(), i32> {
@@ -199,7 +228,7 @@ fn main() {
 
     rocket::ignite()
         .manage(Mutex::new(conn))
-        .mount("/api", routes![api_runs])
+        .mount("/api", routes![api_runs, api_run])
         .mount("/", routes![index, files])
         .launch();
 }
