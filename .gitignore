@@ -7,3 +7,7 @@ yarn-error.log*
 test/js/unit/coverage
 test/js/e2e/reports
 selenium-debug.log
+target/
+**/__pycache__/
+powergrid.egg-info/
+powergrid/powergrid.db
