@@ -113,12 +113,18 @@ fn api_runs(db: State<DB>) -> Result<String, Error> {
                 &hw["version"]
             };
 
+            let power = format!("{:.2}", v["power"].as_f64().unwrap_or(std::f64::NAN));
+            let life = v["estimated-life"]
+                .as_u64()
+                .map(|x| format!("{}:{}", x / 3600, x % 3600 / 60))
+                .unwrap_or("N/A".to_owned());
+
             RunInfo {
                 id: row.get(0),
-                model: name.as_str().unwrap().to_owned(),
-                gnome: sw["gnome"]["version"].as_str().unwrap().to_owned(),
-                est_life: "".to_owned(),
-                est_power: "".to_owned(),
+                model: name.as_str().unwrap_or("N/A").to_owned(),
+                gnome: sw["gnome"]["version"].as_str().unwrap_or("N/A").to_owned(),
+                est_life: life,
+                est_power: power,
             }
         })?
         .collect();
