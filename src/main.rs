@@ -86,6 +86,7 @@ struct RunInfo {
     id: String,
     model: String,
     gnome: String,
+    test_name: String,
     est_life: String,
     est_power: String,
 }
@@ -123,6 +124,7 @@ fn api_runs(db: State<DB>) -> Result<String, Error> {
                 id: row.get(0),
                 model: name.as_str().unwrap_or("N/A").to_owned(),
                 gnome: sw["gnome"]["version"].as_str().unwrap_or("N/A").to_owned(),
+                test_name: v["test-name"].as_str().unwrap_or("").to_owned(),
                 est_life: life,
                 est_power: power,
             }
