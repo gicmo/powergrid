@@ -36,6 +36,14 @@ impl From<rusqlite::Error> for Error {
     }
 }
 
+impl From<serde_json::Error> for Error {
+    fn from(error: serde_json::Error) -> Error {
+        match error {
+            _ => Error::Internal("JS error".into()),
+        }
+    }
+}
+
 impl<'r> Responder<'r> for Error {
     fn respond(self) -> Result<Response<'r>, http::Status> {
         let mut builder = Response::build();
@@ -106,12 +114,11 @@ fn api_runs(db: State<DB>) -> Result<String, Error> {
                 est_life: "".to_owned(),
                 est_power: "".to_owned(),
             }
-        })
-        .unwrap()
+        })?
         .collect();
 
-    let js = serde_json::to_string(&rows.unwrap()).ok().unwrap();
-    Ok(js)
+    rows.map_err(Error::from)
+        .and_then(|ref r| serde_json::to_string(r).map_err(Error::from))
 }
 
 fn main() {
