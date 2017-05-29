@@ -4,6 +4,7 @@ version = "1.0.0"
 authors = ["Christian Kellner <christian@kellner.me>"]
 
 [dependencies]
+clap = "2.24.2"
 rocket = "0.2.6"
 rocket_codegen = "0.2.6"
 rocket_contrib = "0.2.6"

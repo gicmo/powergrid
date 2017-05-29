@@ -1,6 +1,9 @@
 #![feature(plugin)]
 #![plugin(rocket_codegen)]
 
+#[macro_use]
+extern crate clap;
+
 extern crate rocket;
 extern crate rusqlite;
 
@@ -13,8 +16,11 @@ extern crate serde_derive;
 extern crate serde_json;
 
 use std::io;
+use std::io::prelude::*;
 use std::path::{Path, PathBuf};
 use std::sync::Mutex;
+
+use clap::{App, Arg, ArgMatches, SubCommand};
 
 use rocket::response::{NamedFile, Responder, Response};
 use rocket::http;
@@ -121,8 +127,68 @@ fn api_runs(db: State<DB>) -> Result<String, Error> {
         .and_then(|ref r| serde_json::to_string(r).map_err(Error::from))
 }
 
+fn setupdb(local: &ArgMatches) -> Result<(), i32> {
+    println!("🔧  Initializing Database");
+
+    let schema_file = local.value_of("schema").unwrap_or("powergrid/schema.sql");
+    println!("    => schema: {}", schema_file);
+
+    let mut file = std::fs::File::open(schema_file)
+        .map_err(|e| {
+            println!("Could not open schema file: {}", e);
+            1
+        })?;
+
+    let mut sql = String::new();
+
+    file.read_to_string(&mut sql)
+        .map_err(|e| {
+            println!("Could not read schema file: {}", e);
+            2
+        })?;
+
+    //database arg has a default value, so unwrap is safe
+    let db_path = local.value_of("database").unwrap();
+    println!("    => database: {}", db_path);
+
+    let conn = Connection::open(db_path).expect("DB opened");
+
+    conn.execute_batch(&sql)
+        .map_err(|e| {
+            println!("Count not create schema: {}", e);
+            3
+        })?;
+
+    println!("    => DONE");
+    Ok(())
+}
+
 fn main() {
-    let conn = Connection::open("powergrid/powergrid.db").expect("DB opened");
+    let app = App::new("powergrid")
+        .version(crate_version!())
+        .author(crate_authors!())
+        .args(&[Arg::with_name("database")
+                    .long("database")
+                    .global(true)
+                    .default_value("powergrid/powergrid.db")])
+        .subcommand(SubCommand::with_name("setupdb")
+                        .about("Initialize the database")
+                        .args(&[Arg::with_name("schema").long("schema")]));
+
+    let matches = app.clone().get_matches();
+
+    let res = match matches.subcommand() {
+        ("setupdb", Some(submatches)) => setupdb(&submatches),
+        _ => Ok(()),
+    };
+
+    if let Err(i) = res {
+        std::process::exit(i)
+    }
+
+    let db_path = matches.value_of("database").unwrap();
+    let conn = Connection::open(db_path).expect("DB opened");
+
     rocket::ignite()
         .manage(Mutex::new(conn))
         .mount("/api", routes![api_runs])
