@@ -4,8 +4,7 @@ echo "Running in $PWD"
 echo "DB is at: $DATABASE"
 if [ ! -f "$DATABASE" ]; then
   echo "Initializing $DATABASE"
-  flask setupdb
+  /srv/target/release/powergrid setupdb --database "$DATABASE"
 fi
 
-exec flask run --host 0.0.0.0
-
+exec /srv/target/release/powergrid --database "$DATABASE"
