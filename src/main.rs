@@ -23,9 +23,12 @@ use std::sync::Mutex;
 use clap::{App, Arg, ArgMatches, SubCommand};
 
 use rocket::response::{NamedFile, Responder, Response};
+use rocket::response::status;
 use rocket::http;
 use rocket::State;
 use rusqlite::Connection;
+use rusqlite::Error::SqliteFailure;
+use rusqlite::ErrorCode::ConstraintViolation;
 use rocket_contrib::{JSON, UUID, Value};
 
 type DB = Mutex<Connection>;
@@ -34,11 +37,14 @@ type DB = Mutex<Connection>;
 enum Error {
     Internal(String),
     NotFound(String),
+    BadRequest(String),
+    EntityExists,
 }
 
 impl From<rusqlite::Error> for Error {
     fn from(error: rusqlite::Error) -> Error {
         match error {
+            SqliteFailure(e, _) if e.code == ConstraintViolation => Error::EntityExists,
             _ => Error::Internal("SQL error".into()),
         }
     }
@@ -74,6 +80,22 @@ impl<'r> Responder<'r> for Error {
                         {"title": "Entity not found",
                          "detail": val
                         })
+                                                        .to_string()));
+            }
+            Error::BadRequest(val) => {
+                builder
+                    .status(http::Status::BadRequest)
+                    .sized_body(io::Cursor::new(json!(
+                        {"title": "Bad Request",
+                         "detail": val
+                        })
+                                                        .to_string()));
+            }
+            Error::EntityExists => {
+                builder
+                    .status(http::Status::Conflict)
+                    .sized_body(io::Cursor::new(json!(
+                        {"title": "Entity Exists"})
                                                         .to_string()));
             }
         }
@@ -164,6 +186,24 @@ fn api_run(id: UUID, db: State<DB>) -> Result<String, Error> {
     }
 }
 
+#[post("/upload", format = "application/json", data = "<js>")]
+fn api_upload(js: JSON<Value>, db: State<DB>) -> Result<status::Created<JSON<Value>>, Error> {
+
+    let conn = db.lock().expect("DB Lock");
+    let id = js["id"]
+        .as_str()
+        .ok_or(Error::BadRequest("id missing".to_owned()))?;
+
+
+    let js_str = &js.to_string();
+
+    conn.execute("INSERT INTO runs (id, data)
+                  VALUES (?1, ?2)",
+                 &[&id, js_str])?;
+
+    Ok(status::Created(format!("/api/runs/{}", id), None))
+}
+
 fn setupdb(local: &ArgMatches) -> Result<(), i32> {
     println!("🔧  Initializing Database");
 
@@ -228,7 +268,7 @@ fn main() {
 
     rocket::ignite()
         .manage(Mutex::new(conn))
-        .mount("/api", routes![api_runs, api_run])
+        .mount("/api", routes![api_runs, api_run, api_upload])
         .mount("/", routes![index, files])
         .launch();
 }
