@@ -1,7 +1,7 @@
 FROM fedora:latest
 
 RUN dnf -y update && dnf clean all
-RUN dnf -y install npm bzip2 python3-pip && dnf clean all
+RUN dnf -y install npm bzip2 glibc-devel glibc-headers glibc-static gcc cpp sqlite-devel  && dnf clean all
 
 EXPOSE 5000
 ENV FLASK_APP powergrid
@@ -22,13 +22,23 @@ RUN npm install &&            \
     npm cache clean &&        \
     rm -rf ~/.npm
 
+ENV RUSTUP_HOME=/rust
+ENV CARGO_HOME=/cargo
+ENV ROCKET_ENV="production"
+ENV PATH=/cargo/bin:/rust/bin:$PATH
+
+RUN curl -sSf https://sh.rustup.rs \
+   | sh -s -- -y --default-toolchain nightly
+
+RUN cargo -V
+
 ADD . /srv/
+
+RUN cargo build
 
 RUN npm run build            && \
     rm -rf /srv/build        && \
     rm -rf /srv/config       && \
     rm -rf /srv/node_modules
-
-RUN pip3 install .
 
 CMD ["/srv/run.sh"]

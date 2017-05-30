@@ -5,7 +5,7 @@ echo "DB is at: $DATABASE"
 if [ ! -f "$DATABASE" ]; then
   echo "Initializing $DATABASE"
   flask setupdb
+  cargo run -- setupdb --database "$DATABASE"
 fi
 
-exec flask run --host 0.0.0.0
-
+exec cargo run -- --database "$DATABASE"
