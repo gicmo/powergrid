@@ -4,9 +4,9 @@ var path = require('path')
 module.exports = {
   build: {
     env: require('./prod.env'),
-    index: path.resolve(__dirname, '../powergrid/static/index.html'),
-    assetsRoot: path.resolve(__dirname, '../powergrid'),
-    assetsSubDirectory: 'static',
+    index: path.resolve(__dirname, '../public/index.html'),
+    assetsRoot: path.resolve(__dirname, '../public'),
+    assetsSubDirectory: './',
     assetsPublicPath: '/',
     productionSourceMap: true,
     // Gzip off by default as many popular static hosts such as
@@ -25,7 +25,7 @@ module.exports = {
     env: require('./dev.env'),
     port: 8080,
     autoOpenBrowser: true,
-    assetsSubDirectory: 'static',
+    assetsSubDirectory: './',
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {

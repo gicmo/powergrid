@@ -107,12 +107,12 @@ impl<'r> Responder<'r> for Error {
 
 #[get("/")]
 fn index() -> io::Result<NamedFile> {
-    NamedFile::open("powergrid/static/index.html")
+    NamedFile::open("public/index.html")
 }
 
 #[get("/<file..>")]
 fn files(file: PathBuf) -> Option<NamedFile> {
-    NamedFile::open(Path::new("powergrid").join(file)).ok()
+    NamedFile::open(Path::new("public").join(file)).ok()
 }
 
 #[derive(Serialize)]
@@ -207,7 +207,7 @@ fn api_upload(js: JSON<Value>, db: State<DB>) -> Result<status::Created<JSON<Val
 fn setupdb(local: &ArgMatches) -> Result<(), i32> {
     println!("🔧  Initializing Database");
 
-    let schema_file = local.value_of("schema").unwrap_or("powergrid/schema.sql");
+    let schema_file = local.value_of("schema").unwrap_or("schema.sql");
     println!("    => schema: {}", schema_file);
 
     let mut file = std::fs::File::open(schema_file)
@@ -247,7 +247,7 @@ fn main() {
         .args(&[Arg::with_name("database")
                     .long("database")
                     .global(true)
-                    .default_value("powergrid/powergrid.db")])
+                    .default_value("powergrid.db")])
         .subcommand(SubCommand::with_name("setupdb")
                         .about("Initialize the database")
                         .args(&[Arg::with_name("schema").long("schema")]));

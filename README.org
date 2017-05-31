@@ -4,14 +4,9 @@ Power performance metrics for GNOME-Battery-Bench
 ** Local development
 *** Backend
 #+BEGIN_SRC sh
-pip install --editable .
+cargo run
 #+END_SRC
 
-#+BEGIN_SRC sh
-export FLASK_APP=powergrid
-export FLASK_DEBUG=true
-flask run
-#+END_SRC
 *** Frontend
 Running and building
 #+BEGIN_SRC sh

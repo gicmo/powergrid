@@ -1,3 +1,0 @@
-graft powergrid/templates
-graft powergrid/static
-include powergrid/schema.sql
