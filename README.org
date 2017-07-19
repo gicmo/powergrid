@@ -42,5 +42,5 @@ sudo docker stop powergrid && sudo docker rm powergrid
 ** Uploading data
 
 #+BEGIN_SRC sh
-curl -H "Content-Type: application/json" -X POST http://localhost:5000/upload -d @<FILE>
+curl -H "Content-Type: application/json" -X POST http://localhost:5000/api/upload -d @<FILE>
 #+END_SRC
