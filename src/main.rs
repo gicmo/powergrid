@@ -110,7 +110,7 @@ fn index() -> io::Result<NamedFile> {
     NamedFile::open("public/index.html")
 }
 
-#[get("/<file..>")]
+#[get("/<file..>", rank = 2)]
 fn files(file: PathBuf) -> Option<NamedFile> {
     NamedFile::open(Path::new("public").join(file)).ok()
 }
