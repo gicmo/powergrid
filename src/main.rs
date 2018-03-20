@@ -26,10 +26,11 @@ use rocket::response::{NamedFile, Responder, Response};
 use rocket::response::status;
 use rocket::http;
 use rocket::State;
+use rocket::Request;
 use rusqlite::Connection;
 use rusqlite::Error::SqliteFailure;
 use rusqlite::ErrorCode::ConstraintViolation;
-use rocket_contrib::{JSON, UUID, Value};
+use rocket_contrib::{Json, UUID, Value};
 
 type DB = Mutex<Connection>;
 
@@ -59,7 +60,7 @@ impl From<serde_json::Error> for Error {
 }
 
 impl<'r> Responder<'r> for Error {
-    fn respond(self) -> Result<Response<'r>, http::Status> {
+    fn respond_to(self, _request: &Request) -> Result<Response<'r>, http::Status> {
         let mut builder = Response::build();
         builder.header(http::ContentType::JSON);
 
@@ -136,7 +137,7 @@ fn api_runs(db: State<DB>) -> Result<String, Error> {
 
     let rows: Result<Vec<_>, rusqlite::Error> = stmt.query_map(&[], |row| {
             let js: String = row.get(1);
-            let v: serde_json::Value = serde_json::from_str(&js).expect("Valid JSON in DB");
+            let v: serde_json::Value = serde_json::from_str(&js).expect("Valid Json in DB");
 
             let info = &v["system-info"];
             let hw = &info["hardware"];
@@ -188,7 +189,7 @@ fn api_run(id: UUID, db: State<DB>) -> Result<String, Error> {
 }
 
 #[post("/upload", format = "application/json", data = "<js>")]
-fn api_upload(js: JSON<Value>, db: State<DB>) -> Result<status::Created<JSON<Value>>, Error> {
+fn api_upload(js: Json<Value>, db: State<DB>) -> Result<status::Created<Json<Value>>, Error> {
 
     let conn = db.lock().expect("DB Lock");
     let id = js["id"]

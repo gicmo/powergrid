@@ -5,13 +5,14 @@ authors = ["Christian Kellner <christian@kellner.me>"]
 
 [dependencies]
 clap = "2.24.2"
-rocket = "0.2.7"
-rocket_codegen = "0.2.7"
+rocket = "0.3.6"
+rocket_codegen = "0.3.6"
 rusqlite = "0.10"
 serde = "1.0"
 serde_json = "1.0"
 serde_derive = "1.0"
 
 [dependencies.rocket_contrib]
-version = "0.2.7"
-features = ["uuid"]
+version = "*"
+default-features = false
+features = ["json", "uuid"]
