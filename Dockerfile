@@ -15,9 +15,9 @@ VOLUME ["/data"]
 WORKDIR /srv
 
 ADD package.json /srv/
-RUN npm install &&            \
-    npm prune &&              \
-    npm cache clean &&        \
+RUN npm install &&             \
+    npm prune &&               \
+    npm cache clean --force && \
     rm -rf ~/.npm
 
 ENV RUSTUP_HOME=/rust
