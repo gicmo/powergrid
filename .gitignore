@@ -11,3 +11,4 @@ target/
 **/__pycache__/
 powergrid.egg-info/
 powergrid/powergrid.db
+*.db
